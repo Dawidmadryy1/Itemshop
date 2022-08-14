@@ -1,6 +1,6 @@
 export default {
 
-  brand: 'ItemSzop',
+  brand: 'Sklep MinecraftzDirta',
 
   sign_in: 'Zaloguj się',
   sign_up: 'Zarejestruj się',
