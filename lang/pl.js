@@ -1,6 +1,6 @@
 export default {
 
-  brand: 'Sklep MinecraftzDirta',
+  brand: 'Panel MinecraftzDirta',
 
   sign_in: 'Zaloguj się',
   sign_up: 'Zarejestruj się',
