@@ -144,7 +144,7 @@ export default {
         { text: 'Kod', value: 'code' },
         { text: 'Stworzony', value: 'start' },
         { text: 'Wygasa', value: 'end' },
-        { text: 'Opis', value: 'service' }
+        { text: 'Nazwa usługi', value: 'service' }
       ],
       search: '',
       valid: false,
