@@ -74,18 +74,6 @@
       </v-list-item>
       <v-list-item
         link
-        :to="`/panel/shop/${$route.params.shopid}/preview`"
-      >
-        <v-list-item-icon>
-          <v-icon>mdi-eye</v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <v-list-item-title>{{ $t('titles.preview') }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item
-        link
         :to="`/panel/shop/${$route.params.shopid}/settings`"
       >
         <v-list-item-icon>

@@ -93,7 +93,7 @@ export default {
     },
     customSort (items, index, isDesc) {
       items.sort((a, b) => {
-        if (index[0] == 'date') {
+        if (index[0] === 'date') {
           if (!isDesc[0]) {
             return this.localeStringToNumber(b[index]) - this.localeStringToNumber(a[index])
           } else {
