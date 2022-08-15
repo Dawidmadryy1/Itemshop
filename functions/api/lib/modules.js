@@ -475,8 +475,8 @@ exports.executeService = async ({type, firebase, serviceid, shopid, nick, valida
     })
   } catch (e) {}
 
-  // save to payments history
-  await firebase.push(`shops/${shopid}/history`, {
+  // transaction to history
+  return await firebase.push(`shops/${shopid}/history`, {
     nick,
     service: service.name,
     serviceid,

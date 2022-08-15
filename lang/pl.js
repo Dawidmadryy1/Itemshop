@@ -68,7 +68,8 @@ export default {
     generate_new_key: 'Wygeneruj nowy klucz',
     send_test_message: 'Wyślij testową wiadomość',
     reset_stack: 'Zresetuj stos komend',
-    remove_selected: 'Usuń zaznaczone'
+    remove_selected: 'Usuń zaznaczone',
+    create: 'Stwórz'
   },
 
   fields: {
@@ -209,7 +210,8 @@ export default {
     main_page: 'Strona główna',
     modules: 'Moduły',
     voucher_success: 'Pomyślnie użyto vouchera',
-    top_customer_widget: 'Widżet top-customer'
+    top_customer_widget: 'Widżet top-customer',
+    transactions: 'Transakcje'
   },
 
   responses: {
@@ -227,7 +229,8 @@ export default {
     shop_already_exist: 'Sklep z takim ID już istnieje',
     lvlup_error: 'Błąd w konfiguracji lvlup',
     reference_not_found: 'Nie znaleziono odwołania w bazie danych',
-    server_already_exist: 'Serwer z takim ID już istnieje'
+    server_already_exist: 'Serwer z takim ID już istnieje',
+    voucher_already_used: 'Voucher został już wykorystany'
   },
 
   firebase: {

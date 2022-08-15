@@ -76,7 +76,7 @@
                 {{ $t('actions.cancel') }}
               </v-btn>
               <v-btn
-                color="success"
+                color="primary"
                 @click="resetPassword"
               >
                 {{ $t('actions.reset') }}
@@ -183,6 +183,7 @@ export default {
           .then(() => {
             this.snackbar = true
           })
+          .catch(() => {})
       }
     },
     errorDialog (e) {

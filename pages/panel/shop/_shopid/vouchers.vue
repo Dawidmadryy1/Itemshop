@@ -87,8 +87,14 @@
       <v-card-actions>
         <v-spacer />
         <v-btn
-          color="primary"
+          color="accent"
           @click="create"
+        >
+          {{ $t('actions.create') }}
+        </v-btn>
+        <v-btn
+          color="primary"
+          @click="createAndDownload"
         >
           {{ $t('actions.create_and_download') }}
         </v-btn>
@@ -144,7 +150,8 @@ export default {
         { text: 'Kod', value: 'code' },
         { text: 'Stworzony', value: 'start' },
         { text: 'Wygasa', value: 'end' },
-        { text: 'Nazwa usługi', value: 'service' }
+        { text: 'Nazwa usługi', value: 'service' },
+        { text: 'Transakcja', value: 'transaction' }
       ],
       search: '',
       valid: false,
@@ -192,7 +199,8 @@ export default {
           code: i,
           service: this.shop.services[this.vouchers[i].service].name,
           start: this.vouchers[i].start,
-          end: this.vouchers[i].end ? this.vouchers[i].end : this.vouchers[i].start
+          end: this.vouchers[i].end ? this.vouchers[i].end : this.vouchers[i].start,
+          transaction: this.vouchers[i].transaction ? this.vouchers[i].transaction : 'Niewykorzystany'
         })
       }
       return result
@@ -213,7 +221,7 @@ export default {
       }
       this.selected = []
     },
-    create () {
+    createAndDownload () {
       this.$refs.form.validate()
       if (this.valid) {
         const { date, service, amount } = this
@@ -232,6 +240,25 @@ export default {
         }
         const result = codes.join('\n')
         this.download(result, `vouchers-${service}.txt`)
+        this.amount = 0
+        this.service = ''
+      }
+    },
+    create () {
+      this.$refs.form.validate()
+      if (this.valid) {
+        const { date, service, amount } = this
+        const voucher = {
+          service,
+          start: date[0]
+        }
+        if (date[1]) {
+          voucher.end = date[1]
+        }
+        for (let i = 0; i < amount; i++) {
+          const code = Math.random().toString(36).replace('0.', '')
+          this.$fire.database.ref().child(`vouchers/${this.$route.params.shopid}/${code}`).set(voucher)
+        }
         this.amount = 0
         this.service = ''
       }

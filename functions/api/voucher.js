@@ -11,17 +11,20 @@ const req = request(async ({params, firebase, baseUrl}) => {
   const vouchercode = await validate.vouchercode(params.vouchercode)
   const voucher = await firebase.get(`vouchers/${shopid}/${vouchercode}`)
 
-  await firebase.remove(`vouchers/${shopid}/${vouchercode}`)
   await checkIfVoucherExpired(voucher)
-  const service = await firebase.get(`shops/${shopid}/services/${voucher.service}`)
-
-  await executeService({type: 'voucher', firebase, serviceid: voucher.service, shopid, nick, amount: 1, validate, baseUrl})
+  if (!voucher.transaction) {
+    const service = await firebase.get(`shops/${shopid}/services/${voucher.service}`)
+    const transaction = await executeService({type: 'voucher', firebase, serviceid: voucher.service, shopid, nick, amount: 1, validate, baseUrl})
+    await firebase.set(`vouchers/${shopid}/${vouchercode}/transaction`, transaction)
+  } else {
+    throw 'voucher_already_used'
+  }
 })
 
 export const onRequest = req.cloudflare
 export const handler = req.netlify
-let filename = ""
-try{
+let filename = ''
+try {
   filename = __filename
-}catch(e){}
+} catch (e) {}
 export default req.vercel(filename)
