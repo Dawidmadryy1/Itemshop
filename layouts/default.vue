@@ -21,7 +21,7 @@ export default {
   name: 'DefaultLayout',
   data () {
     return {
-      mainUrl: process.env.mainUrl,
+      mainUrl: false,
       oldShopId: false,
       shopName: false
     }
