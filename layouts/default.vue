@@ -7,7 +7,7 @@
     <v-footer v-if="!inframe" class="justify-center">
       <span>
         &copy; {{ new Date().getFullYear() }}
-        <a :href="mainUrl">ItemSzop</a>
+        <a :href="mainUrl">MinecraftzDirta</a>
         <template v-if="shopName && $route.fullPath.substring(1, 6) !== 'panel'">
           | {{ shopName }} nie jest w żaden sposób powiązany z firmą Mojang AB.
         </template>
