@@ -109,11 +109,11 @@
                       tile
                       size="40"
                     >
-                      <v-img class="rounded-lg" :src="`https://crafthead.net/helm/Notch/32`" />
+                      <v-img class="rounded-lg" :src="`https://crafthead.net/helm/damadryy/32`" />
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title>Notch</v-list-item-title>
-                      <v-list-item-subtitle>Podarował 1000zł</v-list-item-subtitle>
+                      <v-list-item-title>Damadryy</v-list-item-title>
+                      <v-list-item-subtitle>Podarował 5zł</v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list>
