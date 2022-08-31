@@ -12,11 +12,8 @@
 - [Wersja produkcyjna](#wersja-produkcyjna)
 - [Plugin do serwera minecraftowego](#plugin-do-serwera-minecraftowego)
 - [Wspierani operatorzy płatności](#wspierani-operatorzy-płatności)
-- [Konfiguracja budowania](#konfiguracja-budowania)
 - [Własne hostowanie](#własne-hostowanie)
-	- [Konfiguracja bazy firebase](#1-konfiguracja-bazy-firebase)
-	- [Przygotowanie sklepu](#2-przygotowanie-sklepu)
-- [Dodatkowe informacje](#dodatkowe-informacje)
+- [Zmienne środowiskowe](#zmienne-środowiskowe)
 - [Limity na darmowych hostingach](#limity-na-darmowych-hostingach)
 - [Dla deweloperów](#dla-deweloperów)
 - [Forum discordowe](#forum-discordowe)
@@ -47,52 +44,34 @@ Aby itemszop działał prawidłowo niezbędne jest zainstalowanie pluginu na ser
 > **_Ważne:_**  Pamiętaj, że nie potrzebujesz stawiać własnego sklepu. Możesz po prostu skorzystać z modelu SaaS.
 
 
-### 1. Konfiguracja bazy firebase
+```bash
+# Tworzenie bazy firebase
+firebase login --reauth
+firebase projects:create projectName
 
-- Utwórz konto serwisowe w bazie
-	- Kliknij `ikonkę koła zębatego > Project Settings > Service accounts > Create service account > Generate new private key`
-	- Zapisz plik `serviceAccountKey.json` na swoim komputerze
-	- Zawartość pliku będzie wyglądać tak:
-```json
-{
-	"type": "XXXXXXXXX",
-	"project_id": "XXXXXXXXX",
-	"private_key_id": "XXXXXXXXX",
-	"private_key": "XXXXXXXXX",
-	"auth_uri": "XXXXXXXXX",
-	"token_uri": "XXXXXXXXX",
-	"auth_provider_x509_cert_url": "XXXXXXXXX",
-	"client_x509_cert_url": "XXXXXXXXX",
-	"client_email": "XXXXXXXXX"
-}
+# TODO: przechwycanie serviceAccountKey.json
+
+# TODO: tworzenie forka
+
+# TODO: tworzenie projektu na cf
+
+# TODO: łączenie cf z gh
+
+# TODO: podpięcie serviceAccount do cf
+
+# TODO: deploy
+
 ```
 
-- Zapisz zawartość pliku serviceAccountKey.json w jednej linijce jako FIREBASE_CONFIG
+## Zmienne środowiskowe
 
-### 2. Przygotowanie sklepu
-
-> **_Wskazówka:_**  Cloudflare jest najlepsze do hostowania itemszopu.
-
-#### Użycie serwisów takich jak Cloudflare, Vercel, Netlify
-
-- Zrób forka głównego repozytorium.
-
-- Połącz swoje repozytorium z panelem na danym serwisie.
-
-- Podczas konfiguracji, zapisz wartość punktu 2 w zmiennej środowiskowej (Environment variable) projektu `FIREBASE_CONFIG`.
-
-- Gotowe!
-
-## Dodatkowe informacje
-- Nowo powstały projekt działa tak samo jak strona główna Itemszopu, ale już łączy się do Twojej własnej bazy i ma swoich własnych użytkowników.
-
-- Jeśli chcesz, żeby twój sklep był tylko hostowany w 'roocie' projektu, to wystarczy dodać zmienną środowiskową ```SINGLE_SHOP``` o wartości id sklepu.
-
-- Istnieje również możliwość zablokowania możliwości tworzenia sklepów wszystkim użytkownikom, oprócz jednego. Wówczas trzeba zapisać zmienną środowiskową ```OWNER_ID``` o wartości id użytkownika (wziętym z bazy firebase).
+| Nazwa zmiennej | Wartość | Wymagane | Informacje |
+| --- | --- | --- | --- |
+| FIREBASE_CONFIG | Klucz serviceAccount | TAK | Umożliwia łączenie się z bazą (nie pokazuj go nikomu) |
+| SINGLE_SHOP | Id sklepu | NIE | Sklep hostowany jest w 'roocie' projektu |
+| OWNER_ID | Id użytkownika firebase | NIE | Blokuje możliwość tworzenia sklepów dla innych użytkowników |
 
 ## Limity na darmowych hostingach
-
-### statyczna strona + serverlessowe funkcje
 
 | Limit wysyłanych requestów | Cloudflare | Vercel | Netlify |
 | --- | --- | --- | --- |
