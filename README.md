@@ -49,7 +49,12 @@ Aby itemszop działał prawidłowo niezbędne jest zainstalowanie pluginu na ser
 firebase login --reauth
 firebase projects:create projectName
 
-# TODO: przechwycanie serviceAccountKey.json
+# Generowanie pliku serviceAccountKey.json
+gcloud auth login
+gcloud projects list
+gcloud config set project PROJECT_ID  # zamień PROJECT_ID na id projektu z wcześniejszej komendy
+gcloud iam service-accounts list
+gcloud iam service-accounts keys create serviceAccountKey.json --iam-account=EMAIL # zamień EMAIL na email do konta serwisowego z wcześniejszej komendy
 
 # TODO: tworzenie forka
 

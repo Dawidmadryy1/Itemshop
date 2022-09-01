@@ -92,3 +92,5 @@ sw.*
 .netlify
 
 firebase-messaging-sw.js
+
+serviceAccountKey.json
