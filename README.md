@@ -65,7 +65,7 @@ gcloud auth login
 gcloud projects list
 gcloud config set project [project-id]
 gcloud iam service-accounts list
-gcloud iam roles create itemszopRole --project [project] --title "Itemszop role" --description "This role has only the serviceusage.services.enable,serviceusage.services.get permission" --permissions "serviceusage.services.enable,serviceusage.services.get"
+gcloud iam roles create itemszopRole --project [project-id] --title "Itemszop role" --description "This role has only the serviceusage.services.enable,serviceusage.services.get permission" --permissions "serviceusage.services.enable,serviceusage.services.get"
 gcloud projects add-iam-policy-binding [project-id] --member='serviceAccount:[email]' --role='projects/[project-id]/roles/itemszopRole'
 gcloud iam service-accounts keys create serviceAccountKey.json --iam-account=[email]
 
