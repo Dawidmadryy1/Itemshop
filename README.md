@@ -43,40 +43,47 @@ Aby itemszop działał prawidłowo niezbędne jest zainstalowanie pluginu na ser
 
 > **_Ważne:_**  Pamiętaj, że nie potrzebujesz stawiać własnego sklepu. Możesz po prostu skorzystać z modelu SaaS, czyli ze strony itemszop.tk.
 
-#### Tworzenie bazy firebase
+#### 1. Klonowanie repo
 ```bash
-firebase login --reauth
-firebase projects:create projectName
+git clone https://github.com/michaljaz/itemszop
+cd itemszop
 
 ```
 
-#### Konfigurowanie konta serwisowego firebase
+#### 2. Tworzenie bazy firebase
 ```bash
+#https://firebase.google.com/docs/cli
+firebase login --reauth
+firebase projects:create [project-name]
+
+```
+
+#### 3. Konfigurowanie konta serwisowego firebase
+```bash
+#https://cloud.google.com/sdk/docs/install
 gcloud auth login
 gcloud projects list
-# zamień PROJECT_ID na id projektu z wcześniejszej komendy
-gcloud config set project PROJECT_ID
+gcloud config set project [project-id]
 gcloud iam service-accounts list
-# zamień EMAIL na email do konta serwisowego z wcześniejszej komendy
-gcloud iam service-accounts keys create serviceAccountKey.json --iam-account=EMAIL
+gcloud iam roles create itemszopRole --project [project] --title "Itemszop role" --description "This role has only the serviceusage.services.enable,serviceusage.services.get permission" --permissions "serviceusage.services.enable,serviceusage.services.get"
+gcloud projects add-iam-policy-binding [project-id] --member='serviceAccount:[email]' --role='projects/[project-id]/roles/itemszopRole'
+gcloud iam service-accounts keys create serviceAccountKey.json --iam-account=[email]
 
 ```
 
-#### Tworzenie forka na githubie
-
+#### 4. Buildowanie projektu
 ```bash
-gh repo fork https://github.com/michaljaz/itemszop
+npm install
+npm run sak
+npm run generate
 
 ```
 
+#### 5. Publikacja do cloudflare pages
 ```bash
-# TODO: tworzenie projektu na cf
-
-# TODO: łączenie cf z gh
-
-# TODO: podpięcie serviceAccount do cf
-
-# TODO: deploy
+#https://developers.cloudflare.com/workers/wrangler/get-started/
+wrangler login
+wrangler pages publish ./dist/
 
 ```
 
