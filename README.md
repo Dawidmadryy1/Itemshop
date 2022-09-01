@@ -41,23 +41,35 @@ Aby itemszop działał prawidłowo niezbędne jest zainstalowanie pluginu na ser
 
 ## Własne hostowanie
 
-> **_Ważne:_**  Pamiętaj, że nie potrzebujesz stawiać własnego sklepu. Możesz po prostu skorzystać z modelu SaaS.
+> **_Ważne:_**  Pamiętaj, że nie potrzebujesz stawiać własnego sklepu. Możesz po prostu skorzystać z modelu SaaS, czyli ze strony itemszop.tk.
 
-
+#### Tworzenie bazy firebase
 ```bash
-# Tworzenie bazy firebase
 firebase login --reauth
 firebase projects:create projectName
 
-# Generowanie pliku serviceAccountKey.json
+```
+
+#### Konfigurowanie konta serwisowego firebase
+```bash
 gcloud auth login
 gcloud projects list
-gcloud config set project PROJECT_ID  # zamień PROJECT_ID na id projektu z wcześniejszej komendy
+# zamień PROJECT_ID na id projektu z wcześniejszej komendy
+gcloud config set project PROJECT_ID
 gcloud iam service-accounts list
-gcloud iam service-accounts keys create serviceAccountKey.json --iam-account=EMAIL # zamień EMAIL na email do konta serwisowego z wcześniejszej komendy
+# zamień EMAIL na email do konta serwisowego z wcześniejszej komendy
+gcloud iam service-accounts keys create serviceAccountKey.json --iam-account=EMAIL
 
-# TODO: tworzenie forka
+```
 
+#### Tworzenie forka na githubie
+
+```bash
+gh repo fork https://github.com/michaljaz/itemszop
+
+```
+
+```bash
 # TODO: tworzenie projektu na cf
 
 # TODO: łączenie cf z gh
