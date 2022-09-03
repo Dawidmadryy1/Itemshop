@@ -12,7 +12,7 @@ async function getToken (serviceAccount) {
 }
 
 async function enableEmailProvider (projectId, token) {
-  await fetch(`https://identitytoolkit.googleapis.com/admin/v2/projects/${projectId}/config?updateMask=signIn.email.enabled,signIn.email.passwordRequired&alt=json`, {
+  const res = await fetch(`https://identitytoolkit.googleapis.com/admin/v2/projects/${projectId}/config?updateMask=signIn.email.enabled,signIn.email.passwordRequired&alt=json`, {
     method: 'PATCH',
     body: JSON.stringify({
       'signIn': {
@@ -27,7 +27,7 @@ async function enableEmailProvider (projectId, token) {
       'Content-Type': 'application/json'
     }
   })
-  console.log('Email sign in enabled')
+  console.log(await res.text())
 }
 
 async function getDefaultWebAppConfig (projectId, token) {
@@ -112,6 +112,7 @@ export default async function () {
     console.log(config)
     await updateFirebaseRules(config.databaseURL, token, rules)
     this.options.firebase = {config}
+    console.log(this.options.firebase)
   } catch (e) {
     console.error('The keys are misconfigured in the FIREBASE_CONFIG environment variable')
     process.exit()
