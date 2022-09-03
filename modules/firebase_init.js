@@ -12,7 +12,8 @@ async function getToken (serviceAccount) {
 }
 
 async function enableEmailProvider (projectId, token) {
-  const res = await fetch(`https://identitytoolkit.googleapis.com/admin/v2/projects/${projectId}/config?updateMask=signIn.email.enabled,signIn.email.passwordRequired&alt=json`, {
+  console.log('Enabling email provider')
+  const res = await fetch(`https://identitytoolkit.googleapis.com/admin/v2/projects/${projectId}/config?updateMask=signIn`, {
     method: 'PATCH',
     body: JSON.stringify({
       'signIn': {
@@ -27,7 +28,8 @@ async function enableEmailProvider (projectId, token) {
       'Content-Type': 'application/json'
     }
   })
-  console.log(await res.text())
+  console.log(await res.json())
+  console.log('Email provider enabled!')
 }
 
 async function getDefaultWebAppConfig (projectId, token) {
@@ -67,14 +69,16 @@ async function getDefaultWebAppConfig (projectId, token) {
 }
 
 async function updateFirebaseRules (databaseURL, token, rules) {
-  const json = await (await fetch(`${databaseURL}/.settings/rules.json`, {
+  console.log('Updating firebase rules...')
+  const res = await fetch(`${databaseURL}/.settings/rules.json`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     },
     body: rules
-  })).json()
+  })
+  const json = await res.json()
   if (json.status === 'ok') {
     console.log('Firebase rules updated')
   } else {
@@ -82,26 +86,12 @@ async function updateFirebaseRules (databaseURL, token, rules) {
   }
 }
 
-async function enableFirebaseDatabase (projectId, token) {
-  const res = await fetch(`https://firebase.googleapis.com/v1beta1/projects/${projectId}:addFirebase`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-    })
-  })
-  console.log(await res.text())
-  console.log("Firebase database enabled")
-}
-
 export default async function () {
   try {
     const serviceAccount = JSON.parse(process.env.FIREBASE_CONFIG)
     const token = await getToken(serviceAccount)
+    console.log(`ProjectId: ${serviceAccount.project_id}`)
     await enableEmailProvider(serviceAccount.project_id, token)
-    await enableFirebaseDatabase(serviceAccount.project_id, token)
     const config = await getDefaultWebAppConfig(serviceAccount.project_id, token)
     let rules
 	  if (process.env.OWNER_ID) {

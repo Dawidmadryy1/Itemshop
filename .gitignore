@@ -94,3 +94,4 @@ sw.*
 firebase-messaging-sw.js
 
 serviceAccountKey.json
+.firebaserc

@@ -37,7 +37,7 @@ Aby itemszop działał prawidłowo niezbędne jest zainstalowanie pluginu na ser
 - [ ] cashbill.pl - [api](https://www.cashbill.pl/pobierz/api/)
 
 
-## Własne hostowanie - cli
+## Własne hostowanie
 
 > **_Ważne:_**  Pamiętaj, że nie potrzebujesz stawiać własnego sklepu. Możesz po prostu skorzystać z modelu SaaS, czyli ze strony itemszop.tk.
 
@@ -49,16 +49,18 @@ cd itemszop
 #https://firebase.google.com/docs/cli
 firebase login --reauth
 firebase projects:create [project-id]
+firebase init database --project=[project-id]
+firebase deploy --only firebase:rules
 
 #https://cloud.google.com/sdk/docs/install
 gcloud auth login
 gcloud projects list
 gcloud config set project [project-id]
 gcloud iam service-accounts list
-gcloud iam roles create itemszopRole --project [project-id] --title "Itemszop role" --description "This role has only the serviceusage.services.enable,serviceusage.services.get permission" --permissions "serviceusage.services.enable,serviceusage.services.get"
+gcloud iam roles create itemszopRole --project [project-id] --title "Itemszop role" --description "Itemszop role" --permissions "serviceusage.services.enable,serviceusage.services.get"
 gcloud projects add-iam-policy-binding [project-id] --member='serviceAccount:[email]' --role='projects/[project-id]/roles/itemszopRole'
-gcloud iam service-accounts keys create serviceAccountKey.json --iam-account=[email]
 gcloud services enable identitytoolkit.googleapis.com --project=[project-id]
+gcloud iam service-accounts keys create serviceAccountKey.json --iam-account=[email]
 
 #https://nodejs.org/en/download/
 npm install
