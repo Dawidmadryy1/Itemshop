@@ -50,7 +50,7 @@ cd itemszop
 firebase login --reauth
 firebase projects:create [project-id]
 firebase init database --project=[project-id]
-firebase deploy --only firebase:rules
+firebase deploy --only database
 
 #https://cloud.google.com/sdk/docs/install
 gcloud auth login
