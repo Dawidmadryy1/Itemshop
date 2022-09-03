@@ -6,17 +6,12 @@
 
 **ItemSzop to sklep twojego serwera minecraftowego za darmo!** Działa dzięki złożeniu serverless'owych funkcji z hostowaniem statycznych plików. Nie wymaga żadnej instalacji - model SaaS. Serwis jest zrobiony we frameworku [Nuxt.js](https://nuxtjs.org/). Uwierzytelnianie użytkowników i zapisywanie konfiguracji sklepów odbywa się za pośrednictwem bazy danych [Firebase](https://firebase.google.com/). Dodatkowo użyty jest framework [Vuetify](https://vuetifyjs.com/) do ładnych stylów strony.
 
-
-
 ## Spis treści
 - [Wersja produkcyjna](#wersja-produkcyjna)
 - [Plugin do serwera minecraftowego](#plugin-do-serwera-minecraftowego)
 - [Wspierani operatorzy płatności](#wspierani-operatorzy-płatności)
-- [Konfiguracja budowania](#konfiguracja-budowania)
 - [Własne hostowanie](#własne-hostowanie)
-	- [Konfiguracja bazy firebase](#1-konfiguracja-bazy-firebase)
-	- [Przygotowanie sklepu](#2-przygotowanie-sklepu)
-- [Dodatkowe informacje](#dodatkowe-informacje)
+- [Zmienne środowiskowe](#zmienne-środowiskowe)
 - [Limity na darmowych hostingach](#limity-na-darmowych-hostingach)
 - [Dla deweloperów](#dla-deweloperów)
 - [Forum discordowe](#forum-discordowe)
@@ -44,75 +39,48 @@ Aby itemszop działał prawidłowo niezbędne jest zainstalowanie pluginu na ser
 
 ## Własne hostowanie
 
-> **_Ważne:_**  Pamiętaj, że nie potrzebujesz stawiać własnego sklepu. Możesz po prostu skorzystać z modelu SaaS.
+> **_Ważne:_**  Pamiętaj, że nie potrzebujesz stawiać własnego sklepu. Możesz po prostu skorzystać z modelu SaaS, czyli ze strony itemszop.tk.
 
-[Tutorial instalacji itemszopu na cloudflare](https://streamable.com/wacai0)
+```bash
+#https://github.com/git-guides/install-git
+git clone https://github.com/michaljaz/itemszop
+cd itemszop
 
-### 1. Konfiguracja bazy firebase
+#https://firebase.google.com/docs/cli
+firebase login --reauth
+firebase projects:create [project-id]
+firebase init database --project=[project-id]
+firebase deploy --only firebase:rules
 
-- Włącz logowanie emailem i hasłem
-	- Kliknij `Build > Authentication > Sign-in method > Native providers > Email/Password`
-	- Następnie kliknij `Enable` przy polu `Email/Password` i kliknij `Save`
-- Dodaj firebase to aplikacji webowej
-	- Kliknij `Project Overview`, następnie Ikonkę ze znakiem `</>`
-	- Otrzymasz wtedy kod node.js, z którego zapisz sobie tą część:
-```js
-{
-	apiKey: "XXXXXXXXX",
-	authDomain: "XXXXXXXXX",
-	databaseURL: "XXXXXXXXX",
-	projectId: "XXXXXXXXX",
-	storageBucket: "XXXXXXXXX",
-	messagingSenderId: "XXXXXXXXX",
-	appId: "XXXXXXXXX"
-}
-```
-- Utwórz konto serwisowe w bazie
-	- Kliknij `ikonkę koła zębatego > Project Settings > Service accounts > Create service account > Generate new private key`
-	- Zapisz plik `serviceAccountKey.json` na swoim komputerze
-	- Zawartość pliku będzie wyglądać tak:
-```json
-{
-	"type": "XXXXXXXXX",
-	"project_id": "XXXXXXXXX",
-	"private_key_id": "XXXXXXXXX",
-	"private_key": "XXXXXXXXX",
-	"auth_uri": "XXXXXXXXX",
-	"token_uri": "XXXXXXXXX",
-	"auth_provider_x509_cert_url": "XXXXXXXXX",
-	"client_x509_cert_url": "XXXXXXXXX",
-	"client_email": "XXXXXXXXX"
-}
+#https://cloud.google.com/sdk/docs/install
+gcloud auth login
+gcloud projects list
+gcloud config set project [project-id]
+gcloud iam service-accounts list
+gcloud iam roles create itemszopRole --project [project-id] --title "Itemszop role" --description "Itemszop role" --permissions "serviceusage.services.enable,serviceusage.services.get"
+gcloud projects add-iam-policy-binding [project-id] --member='serviceAccount:[email]' --role='projects/[project-id]/roles/itemszopRole'
+gcloud services enable identitytoolkit.googleapis.com --project=[project-id]
+gcloud iam service-accounts keys create serviceAccountKey.json --iam-account=[email]
+
+#https://nodejs.org/en/download/
+npm install
+npm run sak
+npm run generate
+
+#https://developers.cloudflare.com/workers/wrangler/get-started/
+wrangler login
+wrangler pages publish ./dist/
 ```
 
-- Tworzenie zmiennej FIREBASE_CONFIG
-	- Automatyczny generator (opcja 1): https://itemszop.tk/firebase_config
-	- Javascriptowy generator (opcja 2) `misc/env_generator.js`
+## Zmienne środowiskowe
 
-### 2. Przygotowanie sklepu
-
-> **_Wskazówka:_**  Cloudflare jest najlepsze do hostowania itemszopu.
-
-#### Użycie serwisów takich jak Cloudflare, Vercel, Netlify
-
-- Zrób forka głównego repozytorium.
-
-- Połącz swoje repozytorium z panelem na danym serwisie.
-
-- Podczas konfiguracji, zapisz wartość punktu 2 w zmiennej środowiskowej (Environment variable) projektu `FIREBASE_CONFIG`.
-
-- Gotowe!
-
-## Dodatkowe informacje
-- Nowo powstały projekt działa tak samo jak strona główna Itemszopu, ale już łączy się do Twojej własnej bazy i ma swoich własnych użytkowników.
-
-- Jeśli chcesz, żeby twój sklep był tylko hostowany w 'roocie' projektu, to wystarczy dodać zmienną środowiskową ```SINGLE_SHOP``` o wartości id sklepu.
-
-- Istnieje również możliwość zablokowania możliwości tworzenia sklepów wszystkim użytkownikom, oprócz jednego. Wówczas trzeba zapisać zmienną środowiskową ```OWNER_ID``` o wartości id użytkownika (wziętym z bazy firebase).
+| Nazwa zmiennej | Wartość | Wymagane | Informacje |
+| --- | --- | --- | --- |
+| FIREBASE_CONFIG | Klucz serviceAccount | TAK | Umożliwia łączenie się z bazą (nie pokazuj go nikomu) |
+| SINGLE_SHOP | Id sklepu | NIE | Sklep hostowany jest w 'roocie' projektu |
+| OWNER_ID | Id użytkownika firebase | NIE | Blokuje możliwość tworzenia sklepów dla innych użytkowników |
 
 ## Limity na darmowych hostingach
-
-### statyczna strona + serverlessowe funkcje
 
 | Limit wysyłanych requestów | Cloudflare | Vercel | Netlify |
 | --- | --- | --- | --- |

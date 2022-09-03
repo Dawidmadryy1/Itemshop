@@ -19,15 +19,6 @@ if (process.env.NODE_ENV === 'production') {
   baseUrl = process.env.NETLIFY_DEV ? `http://localhost:${netlifyPort}` : `http://localhost:${port}`
 }
 
-// firebase config
-let firebaseConfig
-try {
-  firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG)
-} catch (e) {
-  console.error('Klucze zostały źle skonfigurowane w zmiennej środowiskowej FIREBASE_CONFIG')
-  process.exit()
-}
-
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: (process.env.VERCEL || process.env.NETLIFY) ? 'static' : 'server',
@@ -106,7 +97,6 @@ export default {
     [
       '@nuxtjs/firebase',
       {
-        config: firebaseConfig.publicConfig,
         services: {
           database: true,
           auth: {
