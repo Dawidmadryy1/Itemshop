@@ -11,6 +11,8 @@
 - [Plugin do serwera minecraftowego](#plugin-do-serwera-minecraftowego)
 - [Wspierani operatorzy płatności](#wspierani-operatorzy-płatności)
 - [Własne hostowanie](#własne-hostowanie)
+	- [Opcja 1 - instalacja ręczna](#opcja-1---instalacja-ręczna)
+	- [Opcja 2 - instalacja przez cli](#opcja-2---instalacja-przez-cli)
 - [Zmienne środowiskowe](#zmienne-środowiskowe)
 - [Limity na darmowych hostingach](#limity-na-darmowych-hostingach)
 - [Dla deweloperów](#dla-deweloperów)
@@ -40,6 +42,12 @@ Aby itemszop działał prawidłowo niezbędne jest zainstalowanie pluginu na ser
 ## Własne hostowanie
 
 > **_Ważne:_**  Pamiętaj, że nie potrzebujesz stawiać własnego sklepu. Możesz po prostu skorzystać z modelu SaaS, czyli ze strony itemszop.tk.
+
+#### Opcja 1 - instalacja ręczna
+
+TODO: Nagrać filmik instalacyjny
+
+#### Opcja 2 - instalacja przez cli
 
 ```bash
 #https://github.com/git-guides/install-git
