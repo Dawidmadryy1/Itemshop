@@ -11,8 +11,7 @@
 - [Plugin do serwera minecraftowego](#plugin-do-serwera-minecraftowego)
 - [Wspierani operatorzy płatności](#wspierani-operatorzy-płatności)
 - [Własne hostowanie](#własne-hostowanie)
-	- [Opcja 1 - instalacja ręczna](#opcja-1---instalacja-ręczna)
-	- [Opcja 2 - instalacja przez cli](#opcja-2---instalacja-przez-cli)
+	- [instalacja przez cli](#instalacja-przez-cli)
 - [Zmienne środowiskowe](#zmienne-środowiskowe)
 - [Limity na darmowych hostingach](#limity-na-darmowych-hostingach)
 - [Dla deweloperów](#dla-deweloperów)
@@ -33,21 +32,14 @@ Aby itemszop działał prawidłowo niezbędne jest zainstalowanie pluginu na ser
 ## Wspierani operatorzy płatności
 
 - [x] microsms.pl - [api przelew](https://microsms.pl/documents/przelewy_online.pdf), [api sms](https://microsms.pl/kernel/Mails/files/dokumentacja_techniczna_mirosms.pdf)
-- [X] paypal.com - [api p24](https://developer.paypal.com/docs/checkout/apm/przelewy24/)
 - [x] lvlup.pro - [api](https://api.lvlup.pro/v4/redoc)
-- [ ] hotpay.pl - [api](https://hotpay.pl/dokumentacja-api/)
-- [ ] cashbill.pl - [api](https://www.cashbill.pl/pobierz/api/)
 
 
 ## Własne hostowanie
 
 > **_Ważne:_**  Pamiętaj, że nie potrzebujesz stawiać własnego sklepu. Możesz po prostu skorzystać z modelu SaaS, czyli ze strony itemszop.tk.
 
-#### Opcja 1 - instalacja ręczna
-
-TODO: Nagrać filmik instalacyjny
-
-#### Opcja 2 - instalacja przez cli
+#### instalacja przez cli
 
 ```bash
 #https://github.com/git-guides/install-git
@@ -67,7 +59,6 @@ gcloud config set project [project-id]
 gcloud iam service-accounts list
 gcloud iam roles create itemszopRole --project [project-id] --title "Itemszop role" --description "Itemszop role" --permissions "serviceusage.services.enable,serviceusage.services.get"
 gcloud projects add-iam-policy-binding [project-id] --member='serviceAccount:[email]' --role='projects/[project-id]/roles/itemszopRole'
-gcloud services enable identitytoolkit.googleapis.com --project=[project-id]
 gcloud iam service-accounts keys create serviceAccountKey.json --iam-account=[email]
 
 #https://nodejs.org/en/download/

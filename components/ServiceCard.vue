@@ -15,7 +15,7 @@
           </center>
         </v-card-text>
         <v-card-actions>
-          <v-btn block color="success" outlined @click="dialog=true;$emit('blur', true);initPaypal()">
+          <v-btn block color="success" outlined @click="dialog=true;$emit('blur', true);">
             {{ $t('actions.buy_now') }}
           </v-btn>
         </v-card-actions>
@@ -126,14 +126,9 @@
                     :label="`${$t('transfer_psc')} (${service.lvlup_cost} zł ${$t('misc.per_item')})`"
                     value="lvlup"
                   />
-                  <v-radio
-                    v-if="service.paypal_p24 && config.paypal"
-                    :label="`${$t('przelewy24')} (${service.paypal_p24_cost} zł ${$t('misc.per_item')})`"
-                    value="paypal_p24"
-                  />
                 </v-radio-group>
                 <div v-if="type && service.costslider">
-                  <div v-if="type == 'microsms_transfer' || type == 'lvlup' || type=='paypal_p24'">
+                  <div v-if="type == 'microsms_transfer' || type == 'lvlup'">
                     <i18n
                       path="misc.costslider_amount"
                     >
@@ -237,9 +232,6 @@
                       <template v-if="type==='microsms_sms'">
                         {{ $t('sms') }}
                       </template>
-                      <template v-else-if="type==='paypal_p24'">
-                        {{ $t('przelewy24') }}
-                      </template>
                       <template v-else-if="type==='microsms_transfer'">
                         {{ $t('transfer') }}
                       </template>
@@ -258,7 +250,7 @@
               <v-btn
                 :disabled="!valid"
                 color="success"
-                @click="e1=4;initPaypal()"
+                @click="e1=4"
               >
                 {{ $t('actions.next') }}
               </v-btn>
@@ -325,14 +317,6 @@
                   </v-btn>
                 </span>
               </div>
-              <div v-else-if="type=='paypal_p24'">
-                <div id="p24_container" />
-                <span class="float-right">
-                  <v-btn text @click="e1 = 3">
-                    {{ $t('actions.go_back') }}
-                  </v-btn>
-                </span>
-              </div>
               <div v-else>
                 <span class="float-right">
                   <v-btn text @click="e1 = 3">
@@ -351,10 +335,6 @@
 export default {
   name: 'ServiceCard',
   props: {
-    paypalLoaded: {
-      type: Boolean,
-      default: () => (false)
-    },
     config: {
       type: Object,
       default: () => ({})
@@ -425,8 +405,6 @@ export default {
         } else {
           return this.smsCost[this.service.microsms_sms_type][1]
         }
-      } else if (this.type === 'paypal_p24') {
-        return this.service.paypal_p24_cost * this.costslider
       } else {
         return 0
       }
@@ -443,9 +421,6 @@ export default {
       }
       if (this.config.lvlup && this.service.lvlup) {
         price = Math.min(price, this.service.lvlup_cost)
-      }
-      if (this.config.paypal && this.service.paypal_p24) {
-        price = Math.min(price, this.service.paypal_p24_cost)
       }
       return price
     },
@@ -482,36 +457,6 @@ export default {
     }
   },
   methods: {
-    initPaypal () {
-      if (this.type === 'paypal_p24') {
-        document.querySelector('#p24_container').innerHTML = ''
-        window.paypal.Buttons({
-          fundingSource: window.paypal.FUNDING.P24,
-          style: {
-            label: 'pay'
-          },
-          createOrder: (data, actions) => {
-            return actions.order.create({
-              purchase_units: [{
-                amount: {
-                  currency: 'PLN',
-                  value: (+(Math.round(this.price + 'e+2') + 'e-2')).toFixed(2)
-                }
-              }]
-            })
-          },
-          onApprove (data, actions) {
-            // see #5. Capture the transaction
-          },
-          onCancel (data, actions) {
-            console.log(`Order Canceled - ID: ${data.orderID}`)
-          },
-          onError (err) {
-            console.error(err)
-          }
-        }).render('#p24_container')
-      }
-    },
     next () {
       this.$refs.form.validate()
       if (this.valid) {

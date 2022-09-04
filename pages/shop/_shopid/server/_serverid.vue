@@ -11,7 +11,6 @@
         xl="4"
       >
         <ServiceCard
-          :paypal-loaded="paypalLoaded"
           :service="service"
           :config="config"
           :shopid="shopId"
@@ -56,9 +55,6 @@ export default {
       required: true
     }
   },
-  data () {
-    return { paypalLoaded: false }
-  },
   head () {
     return {
       title: this.$t('titles.services')
@@ -85,14 +81,6 @@ export default {
   },
   mounted () {
     this.updateBreadCrumb()
-    if (this.config.paypal) {
-      const script = document.createElement('script')
-      script.onload = () => {
-        this.paypalLoaded = true
-      }
-      script.src = `https://www.paypal.com/sdk/js?client-id=${this.config.paypal_id}&components=buttons,marks&enable-funding=p24&currency=PLN`
-      document.head.appendChild(script)
-    }
   },
   methods: {
     updateBreadCrumb () {
