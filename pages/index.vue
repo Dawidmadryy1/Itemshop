@@ -202,14 +202,6 @@
             src="/lvlup.png"
           />
         </div>
-        <div>
-          <v-img
-            contain
-            height="200"
-            class="mx-2"
-            src="/paypal.webp"
-          />
-        </div>
       </VueSlickCarousel>
     </v-container>
 
