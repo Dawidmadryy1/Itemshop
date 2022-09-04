@@ -41,6 +41,12 @@ Aby itemszop działał prawidłowo niezbędne jest zainstalowanie pluginu na ser
 
 > **_Ważne:_**  Pamiętaj, że nie potrzebujesz stawiać własnego sklepu. Możesz po prostu skorzystać z modelu SaaS, czyli ze strony itemszop.tk.
 
+#### Opcja 1 - instalacja ręczna
+
+TODO: Nagrać filmik instalacyjny
+
+#### Opcja 2 - instalacja przez cli
+
 ```bash
 #https://github.com/git-guides/install-git
 git clone https://github.com/michaljaz/itemszop
