@@ -104,9 +104,7 @@ exports.request = (handler) => {
 
 class Firebase {
   constructor (firebaseConfig) {
-    const {publicConfig, serviceAccount} = JSON.parse(firebaseConfig)
-    this.publicConfig = publicConfig
-    this.serviceAccount = serviceAccount
+    this.serviceAccount = JSON.parse(firebaseConfig)
   }
   async init () {
     this.access_token = await new Promise((resolve, reject) => {
@@ -118,7 +116,7 @@ class Firebase {
         this.serviceAccount.private_key,
         [
           'https://www.googleapis.com/auth/userinfo.email',
-          'https://www.googleapis.com/auth/firebase.database'
+          'https://www.googleapis.com/auth/firebase'
         ]
       )
       jwtClient.authorize(function (error, tokens) {
@@ -131,6 +129,7 @@ class Firebase {
         }
       })
     })
+    this.databaseURL = await this.getDatabaseURL()
     return this
   }
   async init_cloudflare () {
@@ -140,7 +139,8 @@ class Firebase {
       payloadAdditions: {
         scope: [
           'https://www.googleapis.com/auth/userinfo.email',
-          'https://www.googleapis.com/auth/firebase.database'
+          'https://www.googleapis.com/auth/firebase.database',
+          'https://www.googleapis.com/auth/firebase.clients'
         ].join(' ')
       }
     })
@@ -157,10 +157,26 @@ class Firebase {
       })
     ).json()
     this.access_token = access_token
+    this.databaseURL = await this.getDatabaseURL()
     return this
   }
+  async getDatabaseURL () {
+    const webApps = await (await fetch(`https://firebase.googleapis.com/v1beta1/projects/${this.serviceAccount.project_id}/webApps`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.access_token}`
+      }
+    })).json()
+    const {databaseURL} = await (await fetch(`https://firebase.googleapis.com/v1beta1/projects/${this.serviceAccount.project_id}/webApps/${webApps.apps[0].appId}/config`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.access_token}`
+      }
+    })).json()
+    return databaseURL
+  }
   async get (path) {
-    const response = await fetch(`${this.publicConfig.databaseURL}/${path}.json`, {
+    const response = await fetch(`${this.databaseURL}/${path}.json`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${this.access_token}`
@@ -174,7 +190,7 @@ class Firebase {
     }
   }
   async remove (path) {
-    await fetch(`${this.publicConfig.databaseURL}/${path}.json`, {
+    await fetch(`${this.databaseURL}/${path}.json`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${this.access_token}`
@@ -182,7 +198,7 @@ class Firebase {
     })
   }
   async update (path, val) {
-    await fetch(`${this.publicConfig.databaseURL}/${path}.json`, {
+    await fetch(`${this.databaseURL}/${path}.json`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${this.access_token}`
@@ -191,7 +207,7 @@ class Firebase {
     })
   }
   async push (path, val) {
-    const response = await fetch(`${this.publicConfig.databaseURL}/${path}.json`, {
+    const response = await fetch(`${this.databaseURL}/${path}.json`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${this.access_token}`
@@ -200,10 +216,9 @@ class Firebase {
     })
     const data = await response.json()
     return data.name
-
   }
   async set (path, val) {
-    await fetch(`${this.publicConfig.databaseURL}/${path}.json`, {
+    await fetch(`${this.databaseURL}/${path}.json`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${this.access_token}`

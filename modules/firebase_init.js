@@ -99,10 +99,8 @@ export default async function () {
 	  } else {
 	    rules = fs.readFileSync('./rules/firebase.rules.json', 'utf-8')
 	  }
-    console.log(config)
     await updateFirebaseRules(config.databaseURL, token, rules)
     this.options.firebase = {config}
-    console.log(this.options.firebase)
   } catch (e) {
     console.error('The keys are misconfigured in the FIREBASE_CONFIG environment variable')
     process.exit()
